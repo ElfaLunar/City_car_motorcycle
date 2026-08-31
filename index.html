@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Corrida na Cidade</title>
+    <title>Carro na Cidade</title>
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
@@ -15,418 +17,381 @@
 
         body {
             overflow: hidden;
-            background: #071724;
-            font-family: Arial, Helvetica, sans-serif;
+            background: #071722;
         }
 
-        /* CENÁRIO */
-        .cidade {
+        /* ==================================
+           CENÁRIO
+        ================================== */
+
+        .cena {
             position: relative;
+
             width: 100vw;
             height: 100vh;
+
             overflow: hidden;
+        }
+
+
+        /* ==================================
+           BACKGROUND DA CIDADE
+        ================================== */
+
+        .background {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 200%;
+            height: 100%;
+
+            /*
+            A imagem da cidade fica repetida
+            horizontalmente.
+            */
 
             background-image: url("bg.jpg");
-            background-size: cover;
-            background-position: center bottom;
-            background-repeat: no-repeat;
+
+            background-repeat: repeat-x;
+
+            background-size: auto 100%;
+
+            background-position: 0 0;
+
+            animation:
+                cidade 20s linear infinite;
+
+            z-index: 1;
         }
 
-        /* Escurecimento do cenário */
-        .cidade::after {
-            content: "";
-            position: absolute;
-            inset: 0;
 
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.05),
-                rgba(0, 0, 0, 0.25)
-            );
+        /* Movimento SOMENTE da cidade */
 
-            pointer-events: none;
+        @keyframes cidade {
+
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+
         }
 
-        /* TÍTULO */
-        .titulo {
+
+        /* ==================================
+           CARRO
+        ================================== */
+
+        .carro {
+
             position: absolute;
-            top: 40px;
+
+            /*
+            CARRO FIXO
+            */
+
             left: 50%;
+
+            bottom: 20%;
+
+            width: 420px;
 
             transform: translateX(-50%);
 
-            color: white;
-            text-align: center;
+            z-index: 5;
 
-            z-index: 10;
-
-            text-shadow: 0 3px 10px rgba(0,0,0,.6);
+            filter:
+                drop-shadow(
+                    0 12px 8px
+                    rgba(0,0,0,.45)
+                );
         }
 
-        .titulo h1 {
-            font-size: clamp(28px, 4vw, 55px);
-            margin-bottom: 8px;
-        }
 
-        .titulo p {
-            font-size: clamp(14px, 1.5vw, 20px);
-            opacity: .9;
-        }
+        /* ==================================
+           MOTOCICLETA
+        ================================== */
 
-        /* ESTRADA */
-        .estrada {
-            position: absolute;
-            left: 0;
-            bottom: 0;
-
-            width: 100%;
-            height: 35%;
-
-            background: linear-gradient(
-                to bottom,
-                #182c38,
-                #09131b
-            );
-
-            border-top: 4px solid #497181;
-
-            z-index: 2;
-        }
-
-        /* FAIXAS DA ESTRADA */
-        .estrada::before {
-            content: "";
+        .moto {
 
             position: absolute;
-            top: 55%;
-            left: 0;
 
-            width: 100%;
-            height: 8px;
+            /*
+            MOTO FIXA
+            */
 
-            background: repeating-linear-gradient(
-                to right,
-                #eee 0px,
-                #eee 90px,
-                transparent 90px,
-                transparent 180px
-            );
+            left: 50%;
 
-            opacity: .7;
-        }
+            bottom: 4%;
 
-        /* LUZES DA ESTRADA */
-        .estrada::after {
-            content: "";
+            width: 380px;
 
-            position: absolute;
-            top: 20%;
-            left: 0;
-
-            width: 100%;
-            height: 4px;
-
-            background: repeating-linear-gradient(
-                to right,
-                transparent 0px,
-                transparent 100px,
-                #4e8ca3 100px,
-                #4e8ca3 130px,
-                transparent 130px,
-                transparent 230px
-            );
-
-            opacity: .5;
-        }
-
-        /* VEÍCULOS */
-        .veiculo {
-            position: absolute;
+            transform: translateX(-50%);
 
             z-index: 6;
 
-            pointer-events: none;
-
             filter:
-                drop-shadow(0 12px 8px rgba(0,0,0,.4));
+                drop-shadow(
+                    0 12px 8px
+                    rgba(0,0,0,.45)
+                );
         }
 
-        /* CARRO */
-        .carro {
-            width: min(430px, 35vw);
 
-            left: -500px;
-            bottom: 20%;
+        /* ==================================
+           TÍTULO
+        ================================== */
 
-            animation: carroMovimento 10s linear infinite;
+        .titulo {
+
+            position: absolute;
+
+            top: 30px;
+            left: 50%;
+
+            transform:
+                translateX(-50%);
+
+            z-index: 10;
+
+            color: white;
+
+            text-align: center;
+
+            text-shadow:
+                0 3px 10px
+                rgba(0,0,0,.7);
         }
 
-        /* MOTOCICLETA */
-        .moto {
-            width: min(400px, 32vw);
 
-            left: -450px;
-            bottom: 5%;
+        .titulo h1 {
 
-            animation: motoMovimento 7s linear infinite;
+            font-family: Arial, sans-serif;
 
-            animation-delay: -2s;
+            font-size:
+                clamp(
+                    25px,
+                    4vw,
+                    50px
+                );
+
+            margin-bottom: 8px;
         }
 
-        /* ANIMAÇÃO DO CARRO */
-        @keyframes carroMovimento {
 
-            0% {
-                left: -500px;
-                transform: translateY(0);
-            }
+        .titulo p {
 
-            20% {
-                transform: translateY(-4px);
-            }
+            font-family: Arial, sans-serif;
 
-            40% {
-                transform: translateY(0);
-            }
+            font-size: 18px;
 
-            60% {
-                transform: translateY(-3px);
-            }
-
-            80% {
-                transform: translateY(0);
-            }
-
-            100% {
-                left: 110%;
-                transform: translateY(-2px);
-            }
+            opacity: .9;
         }
 
-        /* ANIMAÇÃO DA MOTO */
-        @keyframes motoMovimento {
 
-            0% {
-                left: -450px;
-                transform: translateY(0);
-            }
+        /* ==================================
+           CONTROLE
+        ================================== */
 
-            20% {
-                transform: translateY(-5px);
-            }
-
-            40% {
-                transform: translateY(0);
-            }
-
-            60% {
-                transform: translateY(-4px);
-            }
-
-            80% {
-                transform: translateY(0);
-            }
-
-            100% {
-                left: 110%;
-                transform: translateY(-2px);
-            }
-        }
-
-        /* CONTROLES */
         .controles {
+
             position: absolute;
 
             bottom: 25px;
+
             left: 50%;
 
-            transform: translateX(-50%);
-
-            display: flex;
-            gap: 12px;
+            transform:
+                translateX(-50%);
 
             z-index: 20;
         }
 
+
         button {
+
             border: none;
 
-            padding: 12px 22px;
+            padding:
+                12px 24px;
 
             border-radius: 8px;
 
-            background: #ef5360;
+            background: #e94f5f;
+
             color: white;
 
             font-size: 15px;
+
             font-weight: bold;
 
             cursor: pointer;
-
-            transition: .2s;
         }
+
 
         button:hover {
-            transform: translateY(-2px);
-            background: #ff6975;
+
+            background: #ff6575;
+
         }
 
-        #reiniciar {
-            background: #1684a9;
+
+        /* ==================================
+           PAUSAR
+        ================================== */
+
+        .pausado .background {
+
+            animation-play-state:
+                paused;
         }
 
-        #reiniciar:hover {
-            background: #209cbd;
-        }
 
-        /* PAUSADO */
-        .pausado .carro,
-        .pausado .moto {
-            animation-play-state: paused;
-        }
+        /* ==================================
+           RESPONSIVO
+        ================================== */
 
-        /* RESPONSIVO */
         @media (max-width: 700px) {
 
-            .cidade {
-                background-size: auto 100%;
+            .background {
+
+                background-size:
+                    auto 100%;
             }
+
 
             .carro {
-                width: 55vw;
-                bottom: 22%;
+
+                width: 70vw;
+
+                bottom: 21%;
             }
+
 
             .moto {
-                width: 50vw;
-                bottom: 6%;
+
+                width: 65vw;
+
+                bottom: 5%;
             }
 
-            .estrada {
-                height: 38%;
-            }
 
             .titulo {
-                top: 25px;
+
+                top: 20px;
             }
 
-            .controles {
-                bottom: 15px;
-            }
         }
 
     </style>
+
 </head>
+
 
 <body>
 
-    <div class="cidade" id="cidade">
 
-        <!-- TÍTULO -->
-        <div class="titulo">
-            <h1>Uma Noite na Cidade</h1>
-            <p>Carro e motocicleta em movimento</p>
-        </div>
+    <div class="cena">
 
-        <!-- ESTRADA -->
-        <div class="estrada"></div>
 
-        <!-- CARRO -->
+        <!-- ==================================
+             CIDADE EM MOVIMENTO
+        ================================== -->
+
+        <div class="background"></div>
+
+
+        <!-- ==================================
+             CARRO PARADO
+        ================================== -->
+
         <img
             src="car.png"
-            class="veiculo carro"
-            alt="Carro vermelho"
+            class="carro"
+            alt="Carro"
         >
 
-        <!-- MOTOCICLETA -->
+
+        <!-- ==================================
+             MOTO PARADA
+        ================================== -->
+
         <img
             src="motobike.png"
-            class="veiculo moto"
+            class="moto"
             alt="Motocicleta"
         >
 
-        <!-- BOTÕES -->
+
+        <!-- ==================================
+             TEXTO
+        ================================== -->
+
+        <div class="titulo">
+
+            <h1>
+                Uma noite na cidade
+            </h1>
+
+            <p>
+                🚗 🏍️
+            </p>
+
+        </div>
+
+
+        <!-- ==================================
+             BOTÃO
+        ================================== -->
+
         <div class="controles">
 
-            <button id="pausar">
-                Pausar
-            </button>
-
-            <button id="reiniciar">
-                Reiniciar
+            <button onclick="pausar()">
+                Pausar cidade
             </button>
 
         </div>
+
 
     </div>
 
 
     <script>
 
-        const cidade = document.getElementById("cidade");
+        function pausar() {
 
-        const botaoPausar =
-            document.getElementById("pausar");
+            const cena =
+                document.querySelector(".cena");
 
-        const botaoReiniciar =
-            document.getElementById("reiniciar");
+            cena.classList.toggle("pausado");
+
+            const botao =
+                document.querySelector("button");
 
 
-        /* PAUSAR / CONTINUAR */
+            if (
+                cena.classList.contains("pausado")
+            ) {
 
-        botaoPausar.addEventListener("click", function () {
-
-            cidade.classList.toggle("pausado");
-
-            if (cidade.classList.contains("pausado")) {
-
-                botaoPausar.textContent = "Continuar";
+                botao.textContent =
+                    "Continuar cidade";
 
             } else {
 
-                botaoPausar.textContent = "Pausar";
+                botao.textContent =
+                    "Pausar cidade";
 
             }
 
-        });
-
-
-        /* REINICIAR */
-
-        botaoReiniciar.addEventListener("click", function () {
-
-            cidade.classList.remove("pausado");
-
-            botaoPausar.textContent = "Pausar";
-
-            const carro =
-                document.querySelector(".carro");
-
-            const moto =
-                document.querySelector(".moto");
-
-
-            /* Reinicia a animação */
-
-            carro.style.animation = "none";
-            moto.style.animation = "none";
-
-            /* Força o navegador a recalcular */
-
-            void carro.offsetWidth;
-            void moto.offsetWidth;
-
-            /* Volta para a animação */
-
-            carro.style.animation =
-                "carroMovimento 10s linear infinite";
-
-            moto.style.animation =
-                "motoMovimento 7s linear infinite";
-
-        });
+        }
 
     </script>
 
+
 </body>
+
 </html>
