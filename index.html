@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>City Drive</title>
+    <title>Carro e Moto na Cidade</title>
 
     <style>
-
-        /* =========================================
-           CONFIGURAÇÃO GERAL
-        ========================================= */
 
         * {
             margin: 0;
@@ -28,12 +23,12 @@
         body {
             overflow: hidden;
             background: #071722;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Arial, sans-serif;
         }
 
 
         /* =========================================
-           CENA PRINCIPAL
+           CENA
         ========================================= */
 
         .cena {
@@ -48,8 +43,6 @@
 
         /* =========================================
            BACKGROUND DA CIDADE
-           
-           SOMENTE ELE SE MOVIMENTA
         ========================================= */
 
         .cidade {
@@ -65,18 +58,13 @@
 
             background-repeat: repeat-x;
 
-            /*
-                A imagem ocupa toda a altura.
-                Como a div tem 200%, conseguimos
-                criar um loop horizontal.
-            */
             background-size: auto 100%;
 
-            background-position: 0 center;
+            background-position: left center;
 
             animation:
-                cidadeAndando
-                18s
+                cidadeMovimento
+                15s
                 linear
                 infinite;
 
@@ -84,43 +72,16 @@
         }
 
 
-        /* =========================================
-           MOVIMENTO DO BACKGROUND
-        ========================================= */
+        @keyframes cidadeMovimento {
 
-        @keyframes cidadeAndando {
-
-            0% {
+            from {
                 transform: translateX(0);
             }
 
-            100% {
+            to {
                 transform: translateX(-50%);
             }
 
-        }
-
-
-        /* =========================================
-           ESCURECIMENTO
-        ========================================= */
-
-        .overlay {
-
-            position: absolute;
-
-            inset: 0;
-
-            background:
-                linear-gradient(
-                    to bottom,
-                    rgba(0, 0, 0, 0.05),
-                    rgba(0, 0, 0, 0.15)
-                );
-
-            z-index: 2;
-
-            pointer-events: none;
         }
 
 
@@ -138,199 +99,145 @@
             width: 100%;
             height: 38%;
 
-            /*
-                A estrada fica parada.
-                Apenas as faixas se movimentam.
-            */
-
             background:
                 linear-gradient(
                     to bottom,
-                    #293b44 0%,
-                    #17262e 45%,
-                    #0b151c 100%
+                    #34474f,
+                    #111d23
                 );
 
-            border-top:
-                3px solid
-                rgba(120, 177, 194, 0.6);
-
-            z-index: 3;
+            z-index: 2;
         }
 
 
         /* =========================================
-           FAIXAS DA ESTRADA
+           LINHA CENTRAL ENTRE AS DUAS FAIXAS
         ========================================= */
 
-        .estrada::before {
-
-            content: "";
-
-            position: absolute;
-
-            top: 55%;
-            left: 0;
-
-            width: 100%;
-            height: 7px;
-
-            background:
-                repeating-linear-gradient(
-                    to right,
-                    #ffffff 0px,
-                    #ffffff 110px,
-                    transparent 110px,
-                    transparent 210px
-                );
-
-            animation:
-                faixaMovimento
-                0.7s
-                linear
-                infinite;
-
-            opacity: 0.8;
-        }
-
-
-        @keyframes faixaMovimento {
-
-            from {
-                background-position: 0 0;
-            }
-
-            to {
-                background-position: -210px 0;
-            }
-
-        }
-
-
-        /* =========================================
-           LUZES DA ESTRADA
-        ========================================= */
-
-        .estrada::after {
-
-            content: "";
+        .linha-central {
 
             position: absolute;
 
             left: 0;
-            top: 18%;
+            top: 48%;
 
             width: 100%;
-            height: 3px;
+            height: 6px;
 
             background:
                 repeating-linear-gradient(
                     to right,
-                    transparent 0px,
-                    transparent 80px,
-                    rgba(82, 176, 211, 0.8) 80px,
-                    rgba(82, 176, 211, 0.8) 100px,
-                    transparent 100px,
+                    #ffffff 0,
+                    #ffffff 90px,
+                    transparent 90px,
                     transparent 180px
                 );
 
             animation:
-                luzesMovimento
-                1.2s
+                linhaMovimento
+                .8s
                 linear
                 infinite;
 
-            opacity: 0.5;
+            opacity: .8;
         }
 
 
-        @keyframes luzesMovimento {
+        @keyframes linhaMovimento {
 
             from {
-                background-position: 0 0;
+                background-position: 0;
             }
 
             to {
-                background-position: -180px 0;
+                background-position: -180px;
             }
 
+        }
+
+
+        /* =========================================
+           LINHA LATERAL
+        ========================================= */
+
+        .linha-lateral {
+
+            position: absolute;
+
+            left: 0;
+            top: 5%;
+
+            width: 100%;
+            height: 4px;
+
+            background: #d6d6d6;
+
+            opacity: .5;
         }
 
 
         /* =========================================
            CARRO
            
-           FICA PARADO
+           FAIXA 1
         ========================================= */
 
         .carro {
 
             position: absolute;
 
+            width: 420px;
+
             /*
-                POSIÇÃO DO CARRO
+                CARRO FICA NA FAIXA DE CIMA
             */
 
             left: 58%;
-            bottom: 19%;
 
-            width: 420px;
-
-            height: auto;
+            bottom: 18%;
 
             transform:
                 translateX(-50%);
-
-            /*
-                IMPORTANTE:
-                NÃO possui animation.
-            */
 
             z-index: 6;
 
             filter:
                 drop-shadow(
                     0 15px 10px
-                    rgba(0, 0, 0, 0.45)
+                    rgba(0,0,0,.5)
                 );
         }
 
 
         /* =========================================
-           MOTOCICLETA
+           MOTO
            
-           FICA ATRÁS DO CARRO
+           FAIXA 2
         ========================================= */
 
         .moto {
 
             position: absolute;
 
+            width: 340px;
+
             /*
-                A moto fica atrás,
-                mais para a esquerda.
+                MOTO FICA NA OUTRA FAIXA
             */
 
-            left: 30%;
-            bottom: 7%;
+            left: 58%;
 
-            width: 350px;
-
-            height: auto;
+            bottom: 4%;
 
             transform:
                 translateX(-50%);
-
-            /*
-                Também NÃO possui animation.
-            */
 
             z-index: 7;
 
             filter:
                 drop-shadow(
                     0 15px 10px
-                    rgba(0, 0, 0, 0.5)
+                    rgba(0,0,0,.5)
                 );
         }
 
@@ -343,7 +250,7 @@
 
             position: absolute;
 
-            top: 35px;
+            top: 30px;
             left: 50%;
 
             transform:
@@ -357,9 +264,7 @@
 
             text-shadow:
                 0 3px 12px
-                rgba(0, 0, 0, 0.8);
-
-            pointer-events: none;
+                rgba(0,0,0,.8);
         }
 
 
@@ -369,12 +274,8 @@
                 clamp(
                     26px,
                     4vw,
-                    52px
+                    50px
                 );
-
-            font-weight: 800;
-
-            letter-spacing: 1px;
         }
 
 
@@ -382,14 +283,9 @@
 
             margin-top: 8px;
 
-            font-size:
-                clamp(
-                    13px,
-                    1.5vw,
-                    19px
-                );
+            font-size: 17px;
 
-            opacity: 0.9;
+            opacity: .9;
         }
 
 
@@ -402,16 +298,12 @@
             position: absolute;
 
             left: 50%;
-            bottom: 25px;
+            bottom: 20px;
 
             transform:
                 translateX(-50%);
 
             z-index: 20;
-
-            display: flex;
-
-            gap: 10px;
         }
 
 
@@ -420,64 +312,34 @@
             border: none;
 
             padding:
-                12px 22px;
+                12px 24px;
 
-            border-radius: 9px;
-
-            color: white;
+            border-radius: 8px;
 
             background: #e84f60;
+
+            color: white;
 
             font-size: 15px;
 
             font-weight: bold;
 
             cursor: pointer;
-
-            transition:
-                transform 0.2s,
-                background 0.2s;
         }
 
 
         button:hover {
 
             background: #ff6675;
-
-            transform:
-                translateY(-2px);
         }
 
 
         /* =========================================
-           BOTÃO REINICIAR
+           PAUSAR
         ========================================= */
 
-        #reiniciar {
-
-            background: #167fa3;
-        }
-
-
-        #reiniciar:hover {
-
-            background: #2199bd;
-        }
-
-
-        /* =========================================
-           PAUSAR SOMENTE O BACKGROUND
-        ========================================= */
-
-        .pausado .cidade {
-
-            animation-play-state:
-                paused;
-        }
-
-
-        .pausado .estrada::before,
-        .pausado .estrada::after {
+        .pausado .cidade,
+        .pausado .linha-central {
 
             animation-play-state:
                 paused;
@@ -485,65 +347,28 @@
 
 
         /* =========================================
-           RESPONSIVO
+           CELULAR
         ========================================= */
 
-        @media (max-width: 900px) {
+        @media (max-width: 700px) {
 
             .carro {
+
+                width: 58vw;
+
+                left: 58%;
+
+                bottom: 18%;
+            }
+
+
+            .moto {
 
                 width: 48vw;
 
                 left: 58%;
 
-                bottom: 19%;
-            }
-
-
-            .moto {
-
-                width: 40vw;
-
-                left: 28%;
-
-                bottom: 7%;
-            }
-
-        }
-
-
-        @media (max-width: 600px) {
-
-            .cidade {
-
-                background-size:
-                    auto 100%;
-            }
-
-
-            .estrada {
-
-                height: 40%;
-            }
-
-
-            .carro {
-
-                width: 62vw;
-
-                left: 60%;
-
-                bottom: 21%;
-            }
-
-
-            .moto {
-
-                width: 52vw;
-
-                left: 27%;
-
-                bottom: 7%;
+                bottom: 4%;
             }
 
 
@@ -552,21 +377,6 @@
                 top: 20px;
 
                 width: 90%;
-            }
-
-
-            .controles {
-
-                bottom: 15px;
-            }
-
-
-            button {
-
-                padding:
-                    10px 15px;
-
-                font-size: 13px;
             }
 
         }
@@ -579,57 +389,60 @@
 <body>
 
 
-    <!-- =========================================
-         CENA
-    ========================================= -->
-
     <main class="cena">
 
 
-        <!-- CIDADE QUE SE MOVIMENTA -->
+        <!-- =====================================
+             CIDADE EM MOVIMENTO
+        ====================================== -->
 
         <div
-            class="cidade"
-            id="cidade">
-        </div>
-
-
-        <!-- ESCURECIMENTO -->
-
-        <div
-            class="overlay">
-        </div>
-
-
-        <!-- ESTRADA -->
-
-        <div
-            class="estrada">
+            class="cidade">
         </div>
 
 
         <!-- =====================================
-             MOTOCICLETA
-             
-             FIXA ATRÁS
+             ESTRADA
         ====================================== -->
 
-        <img
-            src="motobike.png"
-            class="moto"
-            alt="Motocicleta">
+        <div
+            class="estrada">
+
+            <!-- linha que separa as faixas -->
+
+            <div
+                class="linha-central">
+            </div>
+
+            <div
+                class="linha-lateral">
+            </div>
+
+        </div>
 
 
         <!-- =====================================
              CARRO
              
-             FIXO NA FRENTE
+             FAIXA 1
         ====================================== -->
 
         <img
             src="car.png"
             class="carro"
             alt="Carro">
+
+
+        <!-- =====================================
+             MOTO
+             
+             FAIXA 2
+        ====================================== -->
+
+        <img
+            src="motobike.png"
+            class="moto"
+            alt="Motocicleta">
 
 
         <!-- =====================================
@@ -643,30 +456,22 @@
             </h1>
 
             <p>
-                A cidade está em movimento
+                Carro e motocicleta
             </p>
 
         </div>
 
 
         <!-- =====================================
-             CONTROLES
+             BOTÃO
         ====================================== -->
 
         <div class="controles">
 
             <button
-                id="pausar">
+                id="botao">
 
                 Pausar
-
-            </button>
-
-
-            <button
-                id="reiniciar">
-
-                Reiniciar
 
             </button>
 
@@ -676,99 +481,39 @@
     </main>
 
 
-    <!-- =========================================
-         JAVASCRIPT
-    ========================================= -->
-
     <script>
 
         const cena =
             document.querySelector(".cena");
 
-        const cidade =
-            document.querySelector(".cidade");
-
-        const estrada =
-            document.querySelector(".estrada");
-
-        const botaoPausar =
-            document.querySelector("#pausar");
-
-        const botaoReiniciar =
-            document.querySelector("#reiniciar");
+        const botao =
+            document.querySelector("#botao");
 
 
-        /* =====================================
-           PAUSAR / CONTINUAR
-        ===================================== */
-
-        botaoPausar.addEventListener(
+        botao.addEventListener(
             "click",
-            function () {
+            function() {
 
-                cena.classList.toggle("pausado");
+                cena.classList.toggle(
+                    "pausado"
+                );
 
 
                 if (
-                    cena.classList.contains("pausado")
+                    cena.classList.contains(
+                        "pausado"
+                    )
                 ) {
 
-                    botaoPausar.textContent =
+                    botao.textContent =
                         "Continuar";
 
                 } else {
 
-                    botaoPausar.textContent =
+                    botao.textContent =
                         "Pausar";
 
                 }
-
-            }
-        );
-
-
-        /* =====================================
-           REINICIAR BACKGROUND
-        ===================================== */
-
-        botaoReiniciar.addEventListener(
-            "click",
-            function () {
-
-                cena.classList.remove(
-                    "pausado"
-                );
-
-                botaoPausar.textContent =
-                    "Pausar";
-
-
-                /*
-                    Reinicia a animação
-                    do background.
-                */
-
-                cidade.style.animation =
-                    "none";
-
-                estrada.style.animation =
-                    "none";
-
-
-                /*
-                    Força o navegador
-                    a recalcular.
-                */
-
-                void cidade.offsetWidth;
-
-
-                /*
-                    Volta a animação.
-                */
-
-                cidade.style.animation =
-                    "cidadeAndando 18s linear infinite";
 
             }
         );
@@ -777,5 +522,4 @@
 
 
 </body>
-
 </html>
