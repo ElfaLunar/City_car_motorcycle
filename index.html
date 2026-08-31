@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Corrida na Cidade</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: #071724;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* CENÁRIO */
+        .cidade {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+
+            background-image: url("bg.jpg");
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+        }
+
+        /* Escurecimento do cenário */
+        .cidade::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.05),
+                rgba(0, 0, 0, 0.25)
+            );
+
+            pointer-events: none;
+        }
+
+        /* TÍTULO */
+        .titulo {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            color: white;
+            text-align: center;
+
+            z-index: 10;
+
+            text-shadow: 0 3px 10px rgba(0,0,0,.6);
+        }
+
+        .titulo h1 {
+            font-size: clamp(28px, 4vw, 55px);
+            margin-bottom: 8px;
+        }
+
+        .titulo p {
+            font-size: clamp(14px, 1.5vw, 20px);
+            opacity: .9;
+        }
+
+        /* ESTRADA */
+        .estrada {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+
+            width: 100%;
+            height: 35%;
+
+            background: linear-gradient(
+                to bottom,
+                #182c38,
+                #09131b
+            );
+
+            border-top: 4px solid #497181;
+
+            z-index: 2;
+        }
+
+        /* FAIXAS DA ESTRADA */
+        .estrada::before {
+            content: "";
+
+            position: absolute;
+            top: 55%;
+            left: 0;
+
+            width: 100%;
+            height: 8px;
+
+            background: repeating-linear-gradient(
+                to right,
+                #eee 0px,
+                #eee 90px,
+                transparent 90px,
+                transparent 180px
+            );
+
+            opacity: .7;
+        }
+
+        /* LUZES DA ESTRADA */
+        .estrada::after {
+            content: "";
+
+            position: absolute;
+            top: 20%;
+            left: 0;
+
+            width: 100%;
+            height: 4px;
+
+            background: repeating-linear-gradient(
+                to right,
+                transparent 0px,
+                transparent 100px,
+                #4e8ca3 100px,
+                #4e8ca3 130px,
+                transparent 130px,
+                transparent 230px
+            );
+
+            opacity: .5;
+        }
+
+        /* VEÍCULOS */
+        .veiculo {
+            position: absolute;
+
+            z-index: 6;
+
+            pointer-events: none;
+
+            filter:
+                drop-shadow(0 12px 8px rgba(0,0,0,.4));
+        }
+
+        /* CARRO */
+        .carro {
+            width: min(430px, 35vw);
+
+            left: -500px;
+            bottom: 20%;
+
+            animation: carroMovimento 10s linear infinite;
+        }
+
+        /* MOTOCICLETA */
+        .moto {
+            width: min(400px, 32vw);
+
+            left: -450px;
+            bottom: 5%;
+
+            animation: motoMovimento 7s linear infinite;
+
+            animation-delay: -2s;
+        }
+
+        /* ANIMAÇÃO DO CARRO */
+        @keyframes carroMovimento {
+
+            0% {
+                left: -500px;
+                transform: translateY(0);
+            }
+
+            20% {
+                transform: translateY(-4px);
+            }
+
+            40% {
+                transform: translateY(0);
+            }
+
+            60% {
+                transform: translateY(-3px);
+            }
+
+            80% {
+                transform: translateY(0);
+            }
+
+            100% {
+                left: 110%;
+                transform: translateY(-2px);
+            }
+        }
+
+        /* ANIMAÇÃO DA MOTO */
+        @keyframes motoMovimento {
+
+            0% {
+                left: -450px;
+                transform: translateY(0);
+            }
+
+            20% {
+                transform: translateY(-5px);
+            }
+
+            40% {
+                transform: translateY(0);
+            }
+
+            60% {
+                transform: translateY(-4px);
+            }
+
+            80% {
+                transform: translateY(0);
+            }
+
+            100% {
+                left: 110%;
+                transform: translateY(-2px);
+            }
+        }
+
+        /* CONTROLES */
+        .controles {
+            position: absolute;
+
+            bottom: 25px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            display: flex;
+            gap: 12px;
+
+            z-index: 20;
+        }
+
+        button {
+            border: none;
+
+            padding: 12px 22px;
+
+            border-radius: 8px;
+
+            background: #ef5360;
+            color: white;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            background: #ff6975;
+        }
+
+        #reiniciar {
+            background: #1684a9;
+        }
+
+        #reiniciar:hover {
+            background: #209cbd;
+        }
+
+        /* PAUSADO */
+        .pausado .carro,
+        .pausado .moto {
+            animation-play-state: paused;
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 700px) {
+
+            .cidade {
+                background-size: auto 100%;
+            }
+
+            .carro {
+                width: 55vw;
+                bottom: 22%;
+            }
+
+            .moto {
+                width: 50vw;
+                bottom: 6%;
+            }
+
+            .estrada {
+                height: 38%;
+            }
+
+            .titulo {
+                top: 25px;
+            }
+
+            .controles {
+                bottom: 15px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="cidade" id="cidade">
+
+        <!-- TÍTULO -->
+        <div class="titulo">
+            <h1>Uma Noite na Cidade</h1>
+            <p>Carro e motocicleta em movimento</p>
+        </div>
+
+        <!-- ESTRADA -->
+        <div class="estrada"></div>
+
+        <!-- CARRO -->
+        <img
+            src="car.png"
+            class="veiculo carro"
+            alt="Carro vermelho"
+        >
+
+        <!-- MOTOCICLETA -->
+        <img
+            src="motobike.png"
+            class="veiculo moto"
+            alt="Motocicleta"
+        >
+
+        <!-- BOTÕES -->
+        <div class="controles">
+
+            <button id="pausar">
+                Pausar
+            </button>
+
+            <button id="reiniciar">
+                Reiniciar
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const cidade = document.getElementById("cidade");
+
+        const botaoPausar =
+            document.getElementById("pausar");
+
+        const botaoReiniciar =
+            document.getElementById("reiniciar");
+
+
+        /* PAUSAR / CONTINUAR */
+
+        botaoPausar.addEventListener("click", function () {
+
+            cidade.classList.toggle("pausado");
+
+            if (cidade.classList.contains("pausado")) {
+
+                botaoPausar.textContent = "Continuar";
+
+            } else {
+
+                botaoPausar.textContent = "Pausar";
+
+            }
+
+        });
+
+
+        /* REINICIAR */
+
+        botaoReiniciar.addEventListener("click", function () {
+
+            cidade.classList.remove("pausado");
+
+            botaoPausar.textContent = "Pausar";
+
+            const carro =
+                document.querySelector(".carro");
+
+            const moto =
+                document.querySelector(".moto");
+
+
+            /* Reinicia a animação */
+
+            carro.style.animation = "none";
+            moto.style.animation = "none";
+
+            /* Força o navegador a recalcular */
+
+            void carro.offsetWidth;
+            void moto.offsetWidth;
+
+            /* Volta para a animação */
+
+            carro.style.animation =
+                "carroMovimento 10s linear infinite";
+
+            moto.style.animation =
+                "motoMovimento 7s linear infinite";
+
+        });
+
+    </script>
+
+</body>
+</html>
